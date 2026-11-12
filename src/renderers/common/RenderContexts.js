@@ -1,4 +1,5 @@
 import RenderContext from './RenderContext.js';
+import { getTextureType } from '../../nodes/core/NodeUtils.js';
 
 /**
  * This module manages the render contexts of the renderer.
@@ -44,10 +45,12 @@ class RenderContexts {
 		//
 
 		let attachmentState;
+		let buildState;
 
 		if ( renderTarget === null ) {
 
 			attachmentState = 'default';
+			buildState = 'default';
 
 		} else {
 
@@ -56,6 +59,7 @@ class RenderContexts {
 			const count = renderTarget.textures.length;
 
 			attachmentState = `${ count }:${ format }:${ type }:${ renderTarget.samples }:${ renderTarget.depthBuffer }:${ renderTarget.stencilBuffer }`;
+			buildState = `${ renderTarget.textures.map( getTextureType ).join( ',' ) }:${ renderTarget.depthBuffer }`;
 
 		}
 
@@ -71,8 +75,10 @@ class RenderContexts {
 
 		//
 
-		const stateKey = attachmentState + '-' + mrtState + '-' + cameraState;
-		const renderStateKey = stateKey + '-' + callDepth; // one render context per call depth keeps the bindings of nested renders separate
+		// Shader builds depend on the output types and depth availability, not on
+		// attachment formats, sample count or stencil configuration.
+		const stateKey = buildState + '-' + mrtState + '-' + cameraState;
+		const renderStateKey = attachmentState + '-' + mrtState + '-' + cameraState + '-' + callDepth; // one render context per call depth keeps the bindings of nested renders separate
 
 		let renderState = this._renderContexts[ renderStateKey ];
 
