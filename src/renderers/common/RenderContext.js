@@ -26,11 +26,10 @@ class RenderContext {
 		this.id = _id ++;
 
 		/**
-		 * Identifies the attachment and MRT configuration of the context.
-		 * Unlike the ID, it is the same for the contexts of all renderer
-		 * call depths, so render objects use it in their cache key. That way,
-		 * the shaders built by `compileAsync()` are also used by nested render
-		 * calls like the scene pass of a render pipeline.
+		 * Identifies node-build-relevant output types, depth support, MRT and camera
+		 * configuration. Unlike the ID, this key is shared across attachment formats,
+		 * sample counts, stencil states and renderer call depths when they produce
+		 * the same shader. Backend pipeline caching handles those differences.
 		 *
 		 * @type {string}
 		 * @default ''
