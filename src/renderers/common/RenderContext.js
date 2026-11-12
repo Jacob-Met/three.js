@@ -26,7 +26,7 @@ class RenderContext {
 		this.id = _id ++;
 
 		/**
-		 * Identifies the attachment and MRT configuration of the context.
+		 * Identifies the shader-relevant output types, depth and MRT configuration.
 		 * Unlike the ID, it is the same for the contexts of all renderer
 		 * call depths, so render objects use it in their cache key. That way,
 		 * the shaders built by `compileAsync()` are also used by nested render
